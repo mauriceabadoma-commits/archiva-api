@@ -1,0 +1,12 @@
+.DS_Store
+Thumbs.db
+.vscode/
+*.log
+
+# Dépendances installées par Composer (recréées par composer install)
+/vendor/
+
+# Fichiers générés par les tests
+/coverage-html/
+coverage.xml
+.phpunit.result.cache

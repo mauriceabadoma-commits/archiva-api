@@ -1,0 +1,39 @@
+name: CI
+
+# Se déclenche automatiquement sur chaque push et chaque Pull Request
+# visant la branche main — exactement la « boucle de feedback » décrite
+# par Jonathan dans la réunion.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-and-analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # historique complet, nécessaire pour une analyse SonarCloud correcte
+
+      - name: Installer PHP (avec Xdebug pour la couverture de code)
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          coverage: xdebug
+          extensions: pdo, pdo_sqlite, pdo_mysql
+
+      - name: Installer les dépendances PHP (Composer)
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Lancer les tests PHPUnit avec rapport de couverture
+        run: vendor/bin/phpunit --coverage-clover coverage.xml
+
+      - name: Analyse de sécurité et de qualité (SonarCloud)
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

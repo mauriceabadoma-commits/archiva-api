@@ -1,0 +1,115 @@
+{
+  "info": {
+    "name": "Archiva API",
+    "description": "Tests des endpoints PHP d'Archiva (local, via XAMPP sur http://localhost/archiva-api). Postman gère automatiquement le cookie de session entre les requêtes de cette collection.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost/archiva-api" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Aurelle\",\n  \"email\": \"aurelle@test.com\",\n  \"password\": \"secret123\",\n  \"level\": \"X2\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/register.php"
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"aurelle@test.com\",\n  \"password\": \"secret123\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/login.php"
+          }
+        },
+        {
+          "name": "Me",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/auth/me.php" }
+        },
+        {
+          "name": "Logout",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/auth/logout.php" }
+        }
+      ]
+    },
+    {
+      "name": "CERs",
+      "item": [
+        {
+          "name": "List all",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/cers.php" }
+        },
+        {
+          "name": "List mine (connecté requis)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/cers.php?mine=1" }
+        },
+        {
+          "name": "Get one",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/cers.php?id=1" }
+        },
+        {
+          "name": "Create (connecté requis)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Mon nouveau CER\",\n  \"description\": \"Description de test depuis Postman\",\n  \"level\": \"X2\"\n}"
+            },
+            "url": "{{baseUrl}}/api/cers.php"
+          }
+        },
+        {
+          "name": "Update (auteur uniquement)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Titre modifié depuis Postman\"\n}"
+            },
+            "url": "{{baseUrl}}/api/cers.php?id=1"
+          }
+        },
+        {
+          "name": "Delete (auteur uniquement)",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/api/cers.php?id=1" }
+        }
+      ]
+    },
+    {
+      "name": "Préférences",
+      "item": [
+        {
+          "name": "Get language",
+          "request": { "method": "GET", "url": "{{baseUrl}}/api/preferences/language.php" }
+        },
+        {
+          "name": "Set language",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"language\": \"en\"\n}"
+            },
+            "url": "{{baseUrl}}/api/preferences/language.php"
+          }
+        }
+      ]
+    }
+  ]
+}
